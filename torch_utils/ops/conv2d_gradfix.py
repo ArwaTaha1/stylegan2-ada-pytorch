@@ -19,7 +19,7 @@ import torch
 
 #----------------------------------------------------------------------------
 
-enabled = True                     # Enable the custom op by setting this to true.
+enabled = False                     # Enable the custom op by setting this to true.
 weight_gradients_disabled = False   # Forcefully disable computation of gradients with respect to the weights.
 
 @contextlib.contextmanager
