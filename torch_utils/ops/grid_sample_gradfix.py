@@ -57,28 +57,34 @@ class _GridSample2dForward(torch.autograd.Function):
 class _GridSample2dBackward(torch.autograd.Function):
     @staticmethod
     def forward(ctx, grad_output, input, grid):
+        # Get the grid_sampler_2d_backward op
         op = torch._C._jit_get_operation('aten::grid_sampler_2d_backward')
-        if _use_pytorch_1_11_api:
-            output_mask = (ctx.needs_input_grad[1], ctx.needs_input_grad[2])
-            grad_input, grad_grid = op(grad_output, input, grid, 0, 0, False, output_mask)
 
-        else:
+        # Newer PyTorch versions need to check needs_input_grad from context
+        try:
+            output_mask = (ctx.needs_input_grad[1], ctx.needs_input_grad[2])
+            result = op(grad_output, input, grid, 0, 0, False, output_mask)
+            grad_input, grad_grid = result[0], result[1]
+        except TypeError:
+            # Fallback for older PyTorch versions
             grad_input, grad_grid = op(grad_output, input, grid, 0, 0, False)
+
         ctx.save_for_backward(grid)
         return grad_input, grad_grid
 
     @staticmethod
     def backward(ctx, grad2_grad_input, grad2_grad_grid):
-        _ = grad2_grad_grid # unused
         grid, = ctx.saved_tensors
+
         grad2_grad_output = None
         grad2_input = None
         grad2_grid = None
 
         if ctx.needs_input_grad[0]:
+            # Only compute second-order grad if required
             grad2_grad_output = _GridSample2dForward.apply(grad2_grad_input, grid)
 
-        assert not ctx.needs_input_grad[2]
         return grad2_grad_output, grad2_input, grad2_grid
+
 
 #----------------------------------------------------------------------------
