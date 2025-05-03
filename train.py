@@ -183,12 +183,12 @@ def setup_training_loop_kwargs(
     args.D_kwargs.epilogue_kwargs.mbstd_group_size = spec.mbstd
 
     #EDITEDDDD
-    finetune_lr = 0.0001 # Or 0.00005 - experiment!
-    args.G_opt_kwargs = dnnlib.EasyDict(class_name='torch.optim.Adam', lr=finetune_lr, betas=[0,0.99], eps=1e-8)
-    args.D_opt_kwargs = dnnlib.EasyDict(class_name='torch.optim.Adam', lr=finetune_lr, betas=[0,0.99], eps=1e-8)
+    # finetune_lr = 0.0001 # Or 0.00005 - experiment!
+    # args.G_opt_kwargs = dnnlib.EasyDict(class_name='torch.optim.Adam', lr=finetune_lr, betas=[0,0.99], eps=1e-8)
+    # args.D_opt_kwargs = dnnlib.EasyDict(class_name='torch.optim.Adam', lr=finetune_lr, betas=[0,0.99], eps=1e-8)
 
-    # args.G_opt_kwargs = dnnlib.EasyDict(class_name='torch.optim.Adam', lr=spec.lrate, betas=[0,0.99], eps=1e-8)
-    # args.D_opt_kwargs = dnnlib.EasyDict(class_name='torch.optim.Adam', lr=spec.lrate, betas=[0,0.99], eps=1e-8)
+    args.G_opt_kwargs = dnnlib.EasyDict(class_name='torch.optim.Adam', lr=spec.lrate, betas=[0,0.99], eps=1e-8)
+    args.D_opt_kwargs = dnnlib.EasyDict(class_name='torch.optim.Adam', lr=spec.lrate, betas=[0,0.99], eps=1e-8)
 
     
     args.loss_kwargs = dnnlib.EasyDict(class_name='training.loss.StyleGAN2Loss', r1_gamma=spec.gamma)
