@@ -183,7 +183,7 @@ def setup_training_loop_kwargs(
     args.D_kwargs.epilogue_kwargs.mbstd_group_size = spec.mbstd
 
     #EDITEDDDD
-    finetune_lr = 0.00005 # Or 0.00005 - experiment!
+    finetune_lr = 2e-5 # Or 0.00005 - experiment!
     args.G_opt_kwargs = dnnlib.EasyDict(class_name='torch.optim.Adam', lr=finetune_lr, betas=[0,0.99], eps=1e-8)
     args.D_opt_kwargs = dnnlib.EasyDict(class_name='torch.optim.Adam', lr=finetune_lr, betas=[0,0.99], eps=1e-8)
 
